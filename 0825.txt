@@ -1,0 +1,54 @@
+자바 개발 환경 기본 설정 
+
+1. 자바 설치
+2. 이클립스 설치 
+3. 환경변수 설정 
+3-1. 자바 환경 변수 이름 JAVA_HOME 암묵적인 규칙
+3-2 로컬 디스크 C - Program files - Java - jdk 디렉토리 선택
+3-3 PATH 편집 새로 만들기 %JAVA_HOME%bin
+PATH 시스템 변수는 무조건 편집 새로 만들기 하면 시스템 재설치 필요!
+4. cmd 실행해서 javac -version 입력 버젼 나오면 성공
+4-1 에러 나오면 환경변수 오타 확인 (공백 확인 해보기) 
+
+cmd exit == x 버튼 
+
+경로 한글 들어가면 터짐 user name 영어로!!
+
+이클립스 실행 우측 상단 Open Perspective - Java open = File - New - JavaProject 생김
+
+초기 화면으로 돌아가고 싶을 때 상단 메뉴 Window -  Perspective - ResetPerspective
+
+Widow - ShowView - Package Explorer
+
+프로젝트 이름 첫 자 대문자 
+
+File - New - JavaProject - Don not creat
+
+프로젝트 우클릭 - New - Class - Package  Pack name Hello 체크 박스 3개 1번 3번 
+
+이름 변경 Refactor - Rename
+
+{ } = 스코프 짝 잘 맞추기!!!!  스코프 열고 엔터 치면 닫아줌 
+ 스코프는 중첩 되지 않는다 
+
+. = 명령을 체인한다 
+
+System.out.println(Hello World!) =  더블 쿼테이션 사용! 
+
+소스 코드(내가 작성하는 코드) =컴파일(compile)= 기계어(010100011) 단축기 ctrl + F11
+컴파일은 소스 코드 전체 변환 
+
+이클립스 단축키
+
+syso ctrl + space = System.out.println(); 자동완성
+main ctrl + space = 
+ctrl + i 자동 줄맞춤
+ctrl + alt + 아래 방향키 라인 복사 됨 
+alt + 방향키 커맨드 라인 위치 변경
+
+ 단줄 주석 
+
+ 전체 주석 
+
+1비트 ( 0 or 1)
+8비트는 1바이트 
