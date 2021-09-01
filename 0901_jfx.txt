@@ -1,0 +1,12 @@
+jfx 다운로드 program files > java 에 압축 풀기
+
+프로젝트 우클릭 > Properties > Jave Build Path > Libraries > Modulepath 클릭 > Add External JARs... > 다운 받은 파일로 들어가서 >
+ lib > ctrl + a에서 ctrl 눌러서 src 제외 하고 열기 > open > apply
+
+--module-path "C:\Program Files\Java\openjfx-11.0.2_windows-x64_bin-sdk\javafx-sdk-11.0.2\lib"
+--add-modules javafx.controls,javafx.fxml
+
+프로젝트 우클릭 - Run as - run configurations - Arguments - VM arguments에 위에 두 줄 복붙 -apply -run
+
+class에 extends Application ctrl + space 자바 어쩌구 클릭 하고 
+스코프 안에 들어가서 ctrl + space 해서 엔터 => start 함수 생김
