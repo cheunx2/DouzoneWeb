@@ -1,7 +1,6 @@
 package Pack;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
@@ -21,31 +20,30 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 class Broadcast{
-	HashMap<Socket, String> hashmap=null;
-	Iterator<Socket> itkey=null;
-	Iterator<String> itvalue=null;
-	Socket key=null;
-	String value=null;
-	String FLAG="a";
+	HashMap<Socket, String> hashmap = null;
+	Iterator<Socket> itkey = null;
+	TextArea ScurrentMem = null;
+	Socket key = null;
+	String FLAG = "a";
 	
-	public Broadcast(HashMap<Socket, String> hashmap) {
-		this.hashmap=hashmap;
+	public Broadcast() {
+		this.hashmap = new Server().hashmap;
 		this.itkey = hashmap.keySet().iterator();
-		this.itvalue = hashmap.values().iterator();
+		this.ScurrentMem = new Server().ScurrentMem;
 	}
 	
-	void loginCehckSend(TextArea currentMem) {
-		String text=currentMem.getText();
+	// 클라이언트 접속 시, 연결된 클라이언트에게 접속 텍스트 영역 업데이트하기
+	void loginCehckSend() { 
+		String text = null;
+		synchronized (ScurrentMem) { text=ScurrentMem.getText(); }
 		while(itkey.hasNext()) {
 			key=itkey.next();
-			value=itvalue.next();
 			try {
 				OutputStream outputstream = key.getOutputStream();
-				byte[] data = (FLAG+text).getBytes(); // String을 byte로 바꿈
+				byte[] data = (FLAG+text).getBytes();
 				outputstream.write(data);
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -54,13 +52,27 @@ class Broadcast{
 	}
 	
 	void send(String s) {
-		Socket key=null;
 		while(itkey.hasNext()) {
 			key=itkey.next();
 			try {
 				OutputStream outputstream = key.getOutputStream();
-				byte[] data1 = s.getBytes(); // String을 byte로 바꿈
-				outputstream.write(data1);
+				byte[] data = s.getBytes();
+				outputstream.write(data);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+	}
+	
+	void serverSend(String s) {
+		String nameTemp = new Server().Sname;
+		while(itkey.hasNext()) {
+			key=itkey.next();
+			try {
+				OutputStream outputstream = key.getOutputStream();
+				byte[] data = ("["+nameTemp+"] : "+s).getBytes();
+				outputstream.write(data);
+				System.out.println("데이터 보냄");
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -69,90 +81,100 @@ class Broadcast{
 }
 
 class IOThread extends Thread{ // 읽는 처리를 하는 스레드
-//	Socket socket=new Socket();
 	HashMap<Socket, String> hashmap;
 	Socket socket;
-	TextArea teatarea1;
-	TextArea currentMem;
+	TextArea ScurrentMem;
+	TextArea StalkBox;
 	
-	public IOThread(HashMap<Socket, String> hashmap, Socket socket,TextArea teatarea1, TextArea currentMem) {
-		this.hashmap=hashmap;
+	public IOThread(Socket socket) {
 		this.socket=socket;
-		this.teatarea1=teatarea1;
-		this.currentMem=currentMem;
+		this.hashmap=new Server().hashmap;
+		this.ScurrentMem = new Server().ScurrentMem;
+		this.StalkBox = new Server().StalkBox;
 	}
 	
 	public void run() { // 데이터를 읽는 작업
 		try {
-			InputStream inputstream = socket.getInputStream(); // 통신 소켓 ss가 우리한테 없다.
+			InputStream inputstream = socket.getInputStream();
 			
 			while(true) {
-				byte[] data = new byte[512]; // 512byte로
-				System.out.println("지금 작동 중임");
-				int size = inputstream.read(data);// ---> blocking 된다.----------------------------
-				
-				
-				
+				byte[] data = new byte[512];
+				int size = inputstream.read(data);
 				String s = new String(data, 0, size);
-				char check = s.charAt(0);
-				String value = null;
-				String temp = s.substring(1);
-				System.out.println(temp);
-				Socket key=null;
-				if (check == 'b') {
-					Iterator<String> itvalue = hashmap.values().iterator();
-					Iterator<Socket> itkey = hashmap.keySet().iterator();
-					while(itvalue.hasNext()) {
-						value = itvalue.next();
-						key = itkey.next();
-						if (value == temp) {
-							hashmap.remove(key);
-							try {
-								byte[] data1 = (s+"님이 나갔습니다.").getBytes(); // String을 byte로 바꿈
-							} catch (Exception e) {
-								// TODO: handle exception
-							}
-							break;
-						}
+				
+				// 클라이언트가 나갔는지 확인
+				char check = s.charAt(0); // 첫 문자가 b인지 체크하기 위함
+				synchronized(hashmap) {
+					if (check == 'b') { // 첫문자가 b라면,
+						exitCheck(s); // 나간 클라이언트의 hashmap 정보 삭제 및 연결된 클라리언트에게 알리기
+					}else { // 클라이언트가 나가지 않았다면,
+						synchronized(StalkBox) { StalkBox.appendText(s + "\n"); }
+						new Broadcast().send(s);
 					}
-					
-					Iterator<String> itvalue1 = hashmap.values().iterator();
-					value = null;
-					while(itvalue1.hasNext()) {
-						value = itvalue1.next();
-						try {
-							currentMem.setText(value+"님이 접속중\n");
-						} catch (Exception e) {
-							// TODO: handle exception
-						}
-					}
-					
-					new Broadcast(hashmap).loginCehckSend(currentMem);
-				}else {
-					teatarea1.appendText(s + "\n");
-					new Broadcast(hashmap).send(s);
 				}
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 	}
+	
+	void exitCheck(String s) {
+		String temp = s.substring(1);
+		Iterator<Socket> itkey = null;
+		Socket key=null;
+		String value=null;
+		
+		itkey = hashmap.keySet().iterator();
+		while(itkey.hasNext()) {
+			key = itkey.next();
+			value=hashmap.get(key);
+			if (value.equals(temp)) {
+				hashmap.remove(key);
+				try {
+					StalkBox.appendText("----"+temp+"님 퇴장----\n");
+					new Broadcast().send("----"+temp+"님 퇴장----\n");
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				break;
+			}
+		}
+		String serverName = new Server().Sname;
+		ScurrentMem.setText(""); // 접속창 지우기
+		ScurrentMem.setText(serverName+"님이 접속중\n"); // 서버 접속 중 작성
+		
+		key=null;
+		value=null;
+		itkey = hashmap.keySet().iterator();
+		while(itkey.hasNext()) {
+			key=itkey.next();
+			value = hashmap.get(key);
+			try {
+				ScurrentMem.setText(value+"님이 접속중\n");
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		
+		synchronized (hashmap) { new Broadcast().loginCehckSend(); }
+	}
 }
 
 class ConnectThread extends Thread{ // 접속만 하는 스레드
-	Server server; // hash 사용하기 위해서
 	HashMap<Socket, String> hashmap;
-	TextArea teatarea1;
-	TextArea currentMem;
-	public ConnectThread(HashMap<Socket, String> hashmap, TextArea teatarea1, TextArea currentMem) {
-		this.hashmap=hashmap;
-		this.teatarea1=teatarea1;
-		this.currentMem=currentMem;
+	TextArea ScurrentMem;
+	TextArea StalkBox;
+	static ServerSocket mss;
+	
+	public ConnectThread() {
+		this.hashmap = new Server().hashmap;
+		this.ScurrentMem = new Server().ScurrentMem;
+		this.StalkBox = new Server().StalkBox;
 	}
+	
 	public void run(){
 		try {
-			//서버 메인 소켓
-			ServerSocket mss = new ServerSocket();		
+			mss = new ServerSocket();		
 			System.out.println("메인 서버 소켓 생성");
 			
 //			mss.bind(new InetSocketAddress("localhost", 5001));  //바인딩
@@ -163,19 +185,24 @@ class ConnectThread extends Thread{ // 접속만 하는 스레드
 				Socket ss = mss.accept();
 				InputStream inputstream = ss.getInputStream();
 				byte[] data = new byte[512];
-				int size = inputstream.read(data); // 이름 받음
+				int size = inputstream.read(data);
 				String name = new String(data, 0, size);
 
 				synchronized(hashmap) {
 					hashmap.put(ss, name);
 					System.out.println("현재 "+hashmap.size()+"명 접속하였습니다.");
-					new IOThread(hashmap, ss, teatarea1, currentMem).start();
+					new IOThread(ss).start();
 				}
 				
 				// 들어온거 브로드캐스팅 및 출력
+				
 				System.out.println(name+"님 들어오셨습니다");
-				currentMem.appendText(name+"님 접속 중\n");
-				new Broadcast(hashmap).loginCehckSend(currentMem);
+				synchronized(ScurrentMem) { ScurrentMem.appendText(name+"님 접속 중\n"); }
+				synchronized(StalkBox) { 
+					StalkBox.appendText("----"+name+"님 입장----\n"); 
+					new Broadcast().send("----"+name+"님 입장----\n");
+				}
+				synchronized (hashmap) { new Broadcast().loginCehckSend(); }
 			}
 		}
 		catch (Exception e) {
@@ -185,17 +212,16 @@ class ConnectThread extends Thread{ // 접속만 하는 스레드
 }
 
 public class Server extends Application  {
-    Stage window;
-    Scene scene;
-    Button button;
-    String Sname;
-    
+    static String Sname;
+    static TextArea StalkBox;
+    static TextArea ScurrentMem;
     static HashMap<Socket, String> hashmap;
+    
     @Override
     public void start(Stage primaryStage) throws Exception{
-        window = primaryStage;
-        window.setTitle("Server");
+        primaryStage.setTitle("Server");
         //------------------------------------------------------------------------------------
+        
         HBox topMenu = new HBox();
         Label labelName = new Label("이름 : ");
 		TextField name = new TextField();
@@ -205,23 +231,23 @@ public class Server extends Application  {
 		topMenu.getChildren().addAll(labelName, name, connectBnt, labelIP);
         
         HBox centerMenu = new HBox();
-		TextArea textarea1 = new TextArea();
-		textarea1.setMaxSize(600, 500);
+		TextArea talkBox = new TextArea();
+		talkBox.setMaxSize(600, 500);
 		centerMenu.setSpacing(10);
 		TextArea currentMem = new TextArea();
 		currentMem.setMaxSize(210, 500);
-		centerMenu.getChildren().addAll(textarea1, currentMem);
+		centerMenu.getChildren().addAll(talkBox, currentMem);
 		
 		HBox bottomMenu = new HBox();
-		TextField talkBox = new TextField();
-		talkBox.setPrefSize(535, 100);
+		TextField inputText = new TextField();
+		inputText.setPrefSize(535, 100);
 		bottomMenu.setSpacing(100);
 		Button sendBnt = new Button("보내기");
 		sendBnt.setPrefSize(100, 100);
 		bottomMenu.setSpacing(10);
 		Button exitBnt = new Button("나가기");
 		exitBnt.setPrefSize(100, 100);
-		bottomMenu.getChildren().addAll(talkBox, sendBnt, exitBnt);
+		bottomMenu.getChildren().addAll(inputText, sendBnt, exitBnt);
         
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(topMenu);
@@ -229,46 +255,50 @@ public class Server extends Application  {
         borderPane.setBottom(bottomMenu);
         
         //-----------------------------------------------------------------------------------
+        StalkBox = talkBox;
+        ScurrentMem = currentMem;
+        
         connectBnt.setOnAction(new EventHandler<ActionEvent>() { //버튼 클릭 했을때의 이벤트
 			@Override
 			public void handle(ActionEvent arg0) {
-				System.out.println("서버 오픈");
 				Sname = name.getText(); // 작성한 텍스트를 가져올 수 있는 함수
-				currentMem.appendText(Sname+"님 접속 중\n"); // 기존 데이터 + 새로운 데이터를 추가하는 개념의 함수
+				ScurrentMem.appendText(Sname+"님 접속 중\n"); // 기존 데이터 + 새로운 데이터를 추가하는 개념의 함수
 				hashmap=new HashMap<Socket, String>();
-				new ConnectThread(hashmap, textarea1, currentMem).start();
+				
+				new ConnectThread().start();
 			}
 		});
         
         sendBnt.setOnAction(new EventHandler<ActionEvent>() { //버튼 클릭 했을때의 이벤트
 			@Override
 			public void handle(ActionEvent arg0) {
-				String s = talkBox.getText(); // 작성한 텍스트를 가져올 수 있는 함수
-				textarea1.appendText("["+Sname+"] : "+s+"\n"); // 기존 데이터 + 새로운 데이터를 추가하는 개념의 함수
-				talkBox.setText(" ");
-				Iterator<Socket> it = hashmap.keySet().iterator();
-				Socket key=null;
-				while(it.hasNext()) {
-					key=it.next();
-					try {
-						OutputStream outputstream = key.getOutputStream();
-						byte[] data1 = ("["+Sname+"] : "+s).getBytes(); // String을 byte로 바꿈
-						outputstream.write(data1);
-						System.out.println("데이터 보냄");
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
-				}
+				String s = inputText.getText(); // 입력창에 입력한 테스트 가져오기
+				talkBox.appendText("["+Sname+"] : "+s+"\n"); // 채팅 박스에 입력한 내용 저장
+				inputText.setText(" "); // 서버의 입력창 리셋
+				synchronized (hashmap) { new Broadcast().serverSend(s); } // 서버가 입력창에 작성한 내용을 클라이언트에게 뿌림
 			}
 		});
         
+        exitBnt.setOnAction(new EventHandler<ActionEvent>() {
+        	@Override
+        	public void handle(ActionEvent arg0) {
+        		try {
+					new ConnectThread().mss.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        		primaryStage.close();
+        	}
+		});
+        
         //---------------------------------------------------------------------------------
-        scene = new Scene(borderPane, 770, 650);
-        window.setScene(scene);
-        window.show();
+        Scene scene = new Scene(borderPane, 770, 650);
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
     
     public static void main(String[] args) {
-        launch(args);
+        launch();
     }
 }
