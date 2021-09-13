@@ -1,0 +1,704 @@
+# 본 문서의 글꼴은 맑은 고딕이며, 폰트 크기는 12에서 작성되었습니다.
+# 코딩이 필요한 문제에서 main 문장은 생략합니다.
+# 메일 주소 : belokana@hanmail.net
+
+이름: 강아름 점수: 59 점 
+5번 8번, 9번 27번 1점 감점 -4
+14번 15번 16번 24번 26번 30번 33번 34번 35번 36번 37번 38번 39번 40번 2.5점 감점 -35
+21번 0.5점 감점
+25번 1.5점 감점
+//-------------------------------------------------------------------------------
+문1) 다음중 변수 선언이 잘못된 것을 고르세요 O
+① short Var14; ② long ArtGame; ③ char 21Star; ④ bool Point_Var_21;
+
+답) 3
+
+
+
+
+//-------------------------------------------------------------------------------
+문2) 결과가 숫자인지 문자열인지 (?)를 채우세요. O
+숫자 + 숫자 = 	(숫자 )
+숫자 + 문자열 = 	(문자열)
+문자열 + 숫자 = 	(문자열 )
+문자열 + 문자열 = (문자열 )
+
+답)
+
+
+
+//-------------------------------------------------------------------------------
+문3)  num이 가질수 있는 최대값과 최솟값을 얻을수 있도록 O
+코딩하세요.
+
+int num;
+
+System.out.println(Integer.MIN_VALUE);
+System.out.println(Integer.MAX_VALUE);
+
+답)
+
+
+
+//-------------------------------------------------------------------------------
+문4) 두 개의 int 변수값을 교환하는 프로그램을 작성 하세요 O
+
+int a = 10, b = 20;
+
+int c = a;
+a = b;
+b = c;
+
+//-------------------------------------------------------------------------------
+문5) 다음 문장을 삼항연산으로 변환하세요. 
+문5-1) X
+int a = 20
+
+	if(10>5) {
+		a = a + 3;
+	}else {
+		a = a - 3;
+	}
+
+답) 10>5 ? (a =a + 3) : (a = a - 3);
+
+
+
+문5-2) O
+public class Hello {
+	static int m1(int a, int b) {
+		if(a > b) {
+			return 1000;
+		}else {
+			return 2000;
+		}
+	}
+	public static void main(String[] args) {
+		System.out.println(m1(4, 3));
+	}
+
+답) 
+public class Hello {
+	static int m1(int a, int b) {
+		return (a>b) ? 1000 : 2000;
+	}
+	public static void main(String[] args) {
+		System.out.println(m1(4, 3));
+	}
+}
+//-------------------------------------------------------------------------------
+문6) a++과 ++a의 차이점을 기술하세요. O
+
+답)
+a++ 명령어 수행 후에 a 가 +1이 되고 ++a는 +1을 먼저 하고나서 명령어를 수행한다  
+
+//-------------------------------------------------------------------------------
+문7) 2의 8승 결과값(256)을 출력하는 프로그램을 2가지 방법으로 작성하세요. O
+
+방법1) for문을 이용한 코딩
+public static void main(String[] args) {
+	int num = 2;
+	for (int i = 1; i < 4; i++) {
+		num *= num;
+	}
+	System.out.println(num);
+}
+
+방법2) 표준 클래스를 이용한 코딩
+public static void main(String[] args) {
+	System.out.println(Math.pow(2,8));
+}
+
+//-------------------------------------------------------------------------------
+문8) int num = 1357일때 1 3 5 7을 합한 결과(16)를 출력하는 프로그램을 작성하세요. 1.5 (for 문 1점 감점)
+단) num은 임의의 정수값이다.
+
+답)
+public class Hello {
+	public static void main(String[] args) {
+		int num = 1357;
+		int total = 0;
+
+		for (int i = (num + "").length(); 0 < i; i--) {
+			total += num/(Math.pow(10,i-1));
+			num %= (Math.pow(10,i-1));
+		}
+		System.out.println(total);
+	}
+}
+//-------------------------------------------------------------------------------
+문9) int num = 12875644일때 1 2 8 7 5 6 4 4 에서 짝수의 개수와 홀수의
+개수를 출력하는 프로그램을 작성하세요. 1.5(for 문 1점 감점)
+단) num은 임의의 정수값이다.
+
+답)
+public class Hello {
+	public static void main(String[] args) {
+		int num = 12875644;
+		int odd = 0;
+		int even = 0;
+
+		for (int i = (num + "").length(); 0 < i; i--) {
+			if((int)(num/Math.pow(10,i-1))%2 == 1){
+				odd++;
+			} else {
+				even++;
+			}
+			num %= (Math.pow(10,i-1));
+		}
+		System.out.println("짝수: "+even+" 홀수: "+odd);
+	}
+}
+//-------------------------------------------------------------------------------
+문10)  우박수 출력 프로그램을 작성하세요. O
+int num = 23; 일때
+결과 : 23 70 35 106 53 160 80 40 20 10 5 16 8 4 2 1
+
+답 : 
+public class Hello {
+	public static void main(String[] args) {
+		int n = 23;
+		System.out.print(n+" ");
+		while(n!=1) {
+			n=(n%2==0) ? n/2 : n*3+1;
+			System.out.print(n+" ");
+		}
+		System.out.println();
+	}
+}
+//-------------------------------------------------------------------------------
+문11) 다음중 잘못된 문장을 고르세요. 
+① while문에서 break와 continue 모두 사용할수 있다.
+② for문에서 break와 continue 모두 사용할수 있다.
+③ while문은 continue를 사용할수 없고 for문은 break를 사용 할수 없다.
+④ while문은 break없이도 사용가능하다.
+
+답 : 3
+//-------------------------------------------------------------------------------
+문12) int 타입으로 배열개수 6개를 만들어서 사용하는 방법 3가지를 작성하세요.
+답 :
+① int[] ar = new int[6];
+② int[] ar = new int[] {1, 2, 3, 4, 5, 6};
+③ int[] ar = {1, 2, 3, 4, 5, 6};
+
+//-------------------------------------------------------------------------------
+문13) 다음 문장중 잘못된 문장을 고르세요. 
+int[] ar = new int[10];
+int num = 0;
+
+① ar[ num ] = ar[ num ] * 3;
+② ar[ ar.length+1 ] = 10;
+③ ar[ ar[num]+1 ] = 20;
+④ ar[ 9 * 2 - 9 ] = 30;
+
+답 : 2
+//-------------------------------------------------------------------------------
+문14) 다음 문장중 메쏘드 설계가 올바른 문장을 고르세요 X
+class Tiger{
+
+① 
+	int method01(int a, b){
+		return a + b;
+	}
+
+②
+	String method01(){
+		new String();
+	}
+③
+	int method01(){
+		int a = 3, int b = 2;
+		if( a > b ){
+			return 10;
+		}
+	}
+
+④
+	String method01( int num ){
+		return new String( "호랑이" ) + num;
+	}
+}
+
+답 : 1 => 4
+//-------------------------------------------------------------------------------
+문15) 다음은 클래스의 생성자에 대한 설명이다. 바르지 않은 것은 ? X
+① 클래스이 인스턴스를 생성하기 위해 호출하는 부분
+② 기본 생성자를 명시하지 않으면 언제나 컴파일러가 자동 생성한다.
+③ 오버로딩(overloading)이 가능하다.
+④ 필드 초기화 용도로 많이 사용한다.
+
+답 : 4 => 2
+//-------------------------------------------------------------------------------
+문16) final이 사용될수 있는 용도를 3가지 설명하세요 X
+① 상수 지정
+
+② 메소드에서 오버라이딩 금지 시킬 때 사용
+
+③ 클래스에서 상속 제외 할 때 
+//-------------------------------------------------------------------------------
+문17)  다음과 같은 문장이 switch문으로 바꿀수만 있다면 switch문을 사용하는것이 
+좋다라고 한다. 이 이유는 무엇인지 설명하세요. O
+
+if( ){
+
+} else if(){
+
+} else if() {
+
+} else {
+
+} 
+
+답 : if else 문은 실행 시간이 일정하지 않고 맨 마지막 조건에 걸린다면 시간이 오래 걸릴 수 있다. 
+이를 방지하기 위해서 조건이 3개 이상인 경우 비교적 실행 시간이 일정한 switch 문을 사용하는 것이 좋다. O
+
+//-------------------------------------------------------------------------------
+문18) 다음 2진수를 10진수로 변환 하세요.
+0010 >> 2
+0101 >> 5
+0110 >> 6
+0111 >> 7
+1010 >> 10
+1011 >> 11
+1100 >> 12
+1110 >> 14
+1111 >> 15
+
+
+
+//-------------------------------------------------------------------------------
+문19) 13시간 54분 17초를 초로 환산하고 출력은 
+10진수, 16진수로 2개를 출력하세요 ? O
+
+답 : 
+public class Hello {
+		static StringBuffer hexaToBinary(int n) {
+			String s = Integer.toBinaryString(n);
+			
+			while(s.length()<28) {
+				s = "0" + s;
+			}
+			
+			StringBuffer s1 = new StringBuffer(s);
+
+			for (int i =0; i<7; i++) {
+				s1.insert((7-i)*4, " ");
+			}
+			return s1;
+		}
+
+		public static void main(String[] args) 
+		{
+			int hour = 13;
+			int minute = 54;
+			int sec = 17;
+			int total = hour*3600 + minute*60 + sec;
+			
+			System.out.println(total);
+			System.out.println(hexaToBinary(total));
+		}
+}
+//-------------------------------------------------------------------------------
+문20) 다음과 같은 출력 결과가 나올수 있도록 ( ? ) 영역을 코드로 채우세요 O
+출력 결과
+호랑이 코끼리 당나귀
+
+	String[] s = ( ? )		// >> 여기를 채우세요
+		
+	for (String item : s) {
+		System.out.print(item + " ");
+	}System.out.println();
+
+
+답 : 
+public class Hello {
+	public static void main(String[] args) 
+	{
+		String[] s = new String[]{"호랑이", "당나귀","코끼리"};		// >> 여기를 채우세요
+
+				for (String item : s) {
+					System.out.print(item + " ");
+				}System.out.println();
+
+	}
+}
+//-------------------------------------------------------------------------------
+문21) 대문자 A부터 Z 까지 출력하는 프로그램을 작성하세요. -0.5(변수 안 주고 바로 아스키 코드) 
+
+답 : 
+public static void main(String[] args) 
+	{
+		for (int i = 65; i < 91; i++) {
+			System.out.println((char)i);
+		}
+
+	}
+//-------------------------------------------------------------------------------
+문22) 출력 결과가 30 이 나올수 있도록 ( ? ) 영역을 코드로 채우세요 O
+단) 표준 클래스를 이용해서 출력하세요.
+
+		int n1 = 10, n2;
+		String s1 = "20";
+		
+		n2 = ?		// >> 여기를 채우세요
+		
+		// 출력 결과 : 30
+		System.out.println( n1 + n2 );
+
+답 : 
+Integer.parseInt(s1);
+//-------------------------------------------------------------------------------
+문23) 다음과 같은 출력 결과가 나올수 있도록 ( ? ) 영역을 코드로 채우세요 O
+출력결과
+COMPUTER
+computer
+
+		String s = "CompuTER";
+		
+		System.out.println( ? );
+		System.out.println( ? );
+
+답 : 
+System.out.println(s.toUpperCase());
+System.out.println(s.toLowerCase());
+
+//-------------------------------------------------------------------------------
+문24) 리터럴에 대하여 설명하세요 X
+
+답 : value로 int a = 10; 명령문에서 10이 리터럴에 해당한다  
+
+=> 변수 또는 객체에 대입되는 값 
+//-------------------------------------------------------------------------------
+문25) 7에서 14사이의 숫자 5개가 랜덤하게 출력되는 프로그램을 작성하세요 -1.5 (7 => 8)
+결과 샘플) 7, 14, 8, 9, 11 
+
+답 : 
+public static void main(String[] args) 
+	{
+		for (int i = 0; i < 5; i++) {
+			double a = Math.random()*7 + 7;
+			System.out.println((int)a);
+		}
+	}
+
+//-------------------------------------------------------------------------------
+문26) 예외(Exception)가 발생할때 나타 날수 있는 예외종류를 3가지 이상
+기술하세요. X
+ex) NullPointerException
+
+답)
+
+1.
+
+2.
+
+3. 
+//-------------------------------------------------------------------------------
+문27) overloading과 overriding에 대하여 설명하세요. -1(오버 라이딩 동일한 이름 없음)
+
+답 : 
+오버로딩은 클래스 내에서 동일명의 함수에 인수의 타입이나 갯수를 달리하여 재정의 하는 것이고 
+오버라이딩은 자식 클래스에서 부모 클래스의 메소드를 재정의 하여 사용하는 것을 의미한다.
+
+//-------------------------------------------------------------------------------
+문28) 정수형 인수 전달이 2개 있고 , 리턴값이 String인 람다 함수를 작성하세요 O
+interface Test{
+	String m1(int a, int b);
+}
+public static void main(String[] args) 
+	{
+	Test t1 = (a, b)-> {
+			return a+b+"";
+		};
+}
+//-------------------------------------------------------------------------------
+문29)
+m1() 함수는 호랑이 출력
+m2() 함수는 코끼리 출력
+m3() 함수는 독수리 출력 한다고 할때
+
+t.m1().m2().m3(); 문법이 성립할수 있도록
+Tiger 클래스 내부를 코드로 채우세요. O
+
+class Tiger {
+
+}
+
+public class Hello {
+	public static void main(String[] args) {	
+		Tiger t = new Tiger();
+
+		t.m1().m2().m3(); // << 여기 코드가 성립될수 있도록 클래스 작성
+	}
+}
+
+답 : 
+class Tiger {
+	Tiger m1() {
+		System.out.println("호랑이");
+		return this;
+	}
+	
+	Tiger m2() {
+		System.out.println("코끼리");
+		return this;
+	}
+	
+	void m3() {
+		System.out.println("독수리");
+	}
+}
+//-------------------------------------------------------------------------------
+문30) showInfo() 함수를 호출 하였을때 결과가
+홍길동 23 이라고 출력되었다. 부족한 부분의 코드를 채워 넣으세요. X
+
+
+class Person{
+	String name;
+	int age;
+	
+	void showInfo() {
+		System.out.println(name + " " + age);
+	}
+}
+public class Hello {
+	public static void main(String[] args) {
+		Person person = new Person( "홍길동", 23 );
+		person.showInfo();
+	}
+}
+
+답 : 
+
+//-------------------------------------------------------------------------------
+문31) 익명 클래스를 이용하여 m1()함수를 호출할때 
+호랑이 가 출력될수 있도록 코드를 작성하세요. O
+
+interface Tiger{
+	void m1();
+}
+
+public class Hello {
+	public static void main(String[] args) {
+		Tiger t1 = new TIger() {
+			@Override
+			public void m1() {
+				System.out.println("호랑이");
+			}
+		}; 
+		t1. m1();
+	}
+}
+//-------------------------------------------------------------------------------
+문32)
+출력 결과가 
+멍멍
+야옹
+이 나오는 코드이다.
+( ? ) 부분의 코드를 채우세요
+
+class Animal{
+	void cry() {
+		System.out.println("...");
+	}
+}
+
+class Dog extends Animal{
+	void cry() {
+		System.out.println("멍멍");
+	}
+}
+class Cat extends Animal{
+	void cry() {
+		System.out.println("야옹");
+	}
+}
+
+public class Hello {
+public static void main(String[] args) {
+		Animal[] animals = new Animal[]{new Dog(), new Cat()}	// 여기 부분을 채우세요
+		
+		animals[0].cry(); // 멍멍
+		animals[1].cry(); // 야옹
+	}
+}
+
+//-------------------------------------------------------------------------------
+문33) blocking 함수를 4개 적어주세요. X
+
+답 : nextInt(), 
+
+
+
+//-------------------------------------------------------------------------------
+문34) Math클래스를 이용하여 출력결과가
+3.0
+4.0
+-4.0
+-3.0
+나올수 있도록 println( ) 함수안을 채워 넣으세요. X
+
+public class Hello {
+	public static void main(String[] args) {
+		double a = 3.78;
+		double b = 3.27;
+		double c = -3.68;
+		double d = -3.12;
+
+		System.out.println(Math.floor(a)); // 변수 a를 이용하세요
+		System.out.println(Math.ceil(b)); // 변수 b를 이용하세요
+		System.out.println(Math.rint(c)); // 변수 c를 이용하세요
+		System.out.println(Math.round(d)); // 변수 d를 이용하세요
+	}
+}
+
+//-------------------------------------------------------------------------------
+문35) 프로그램이 실행될수 있도록 추상 함수를 작성하세요 X
+
+class Lion extends Tiger{
+	void m1() {
+		System.out.println(1);
+	}
+}
+
+public class Hello {
+	public static void main(String[] args) {
+		Tiger t = new Lion();
+		t.m1();
+	}
+}
+
+답 : 
+abstract class Tiger {
+	void m1() {
+	}
+
+//-------------------------------------------------------------------------------
+문36) 다음의 코드가 실행될수 있도록 ( ? )를 코드를 작성하세요 X
+class A{
+	void m1() { 
+		System.out.println(1); 
+	}
+}
+
+interface B{
+	void m2();
+}
+
+interface C{
+	void m3();
+}
+
+class ( ? ){ // << 여기 여기를 채우세요.
+	public void m2() {
+		System.out.println(2);
+	}
+	public void m3() {
+		System.out.println(3);
+	}
+}
+
+public class Hello {
+	public static void main(String[] args) {
+		D t = new D();
+		t.m1();
+		t.m2();
+		t.m3();
+	}
+}
+
+답 :
+
+
+//-------------------------------------------------------------------------------
+문37) 다음 문법이 성립할수 있도록 클래스를 작성하세요 X
+
+public class Hello {
+	public static void main(String[] args) {
+		Tiger<String> t1 = new Tiger<String>();
+		t1.setData("호랑이");
+		System.out.println(t1.getData());
+				
+		Tiger<Boolean> t2 = new Tiger<Boolean>();
+		t2.setData(true);
+		System.out.println(t2.getData());
+	}
+}
+
+
+답 :  
+
+
+
+
+//-------------------------------------------------------------------------------
+문38)
+	int num = 0x3b12cd59;
+일때
+
+위의 8자리 16진수 중에 12c 만 10진수로 변환한 결과를 출력하는
+프로그램을 작성하세요.( 12c 를 10진수로 환산하면 300 입니다.) X
+
+답 : 
+
+
+
+//-------------------------------------------------------------------------------
+문39) LinkedList<T> 콜렉션에 대한 설명으로 틀린것은 ?  X
+① 새로운 타입의 클래스를 관리할수 있다.
+② String 타입의 데이타를 관리할수 있다.
+③ int 타입의 데이타를 관리할수 있다.
+④ 제네릭 문법으로 제작되었다.
+
+답 :
+
+
+
+
+//-------------------------------------------------------------------------------
+문40) 프로그램의 결과가 다음처럼 나타날수 있도록 프로그램을 작성하세요 X
+단) 문제에 주어진 for문의 반복횟수를 수정하지 않는다. 
+단) 배열을 사용하지 않는다.
+
+401호 402호 403호 
+301호 302호 303호 
+201호 202호 203호 
+101호 102호 103호 
+
+public static void main(String[] args) {
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 3; j++) {
+			여기 코드를 채우세요
+		}
+		System.out.println();
+	}
+}
+
+답
+
+
+//-------------------------------------------------------------------------------
+문41) 뽀너스 문제( 5점으로 배점 됩니다. ) X
+- 이중 for문은 한번만 사용됩니다.
+- 배열은 사용하지 않습니다.
+- num 값은 반드시 홀수값중에 1개라고 가정한다.
+
+다음과 같이 출력될수 있도록 프로그램을 코딩하세요
+
+int num = 5; // 일때의 결과값
+
+    *
+  * * *
+* * * * *
+  * * *
+    *
+
+
+
+
+
+
+
+
+
+
