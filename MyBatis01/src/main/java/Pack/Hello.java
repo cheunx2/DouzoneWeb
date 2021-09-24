@@ -9,6 +9,62 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
+class Person{
+	String name; // 필드 => property
+	int age;
+	
+	public String getName() { return name; }
+	public void setName(String name) { this.name = name; }
+	public int getAge() { return age; }
+	public void setAge(int age) { this.age = age; }
+}
+
+/*
+// Bean 사용시 지켜야 할 약속
+// 1. 디폴트 생성자만 존새
+// 2. 반드시 setter getter 함수가 있어야 한다 
+
+public class Hello{
+	public static void main(String[] args) {
+		SqlSessionFactory ssf = null;
+		SqlSession session = null;
+		InputStream is = null;
+
+		try {
+			is = Resources.getResourceAsStream("mybatis-config.xml");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		ssf = new SqlSessionFactoryBuilder().build(is);
+
+		session = ssf.openSession();
+
+		try {
+			Person p = new Person();
+			p.setName("독수리");
+			p.setAge(99);
+			
+//			List<Person> mm = session.selectList("test08");
+//			
+//			for (Person p : mm) {
+//				System.out.println(p.getName()+" "+p.getAge());
+//			}
+			if(session.update("test07",p)>0) {
+				session.commit();
+			}
+		} catch (Exception e1){
+			e1.printStackTrace();
+		} finally {
+			session.close();
+		}
+		
+	}
+}
+*/
+
+
+// AOP 패턴
 interface Delegate{
 	int delegate(SqlSession session);
 }
@@ -35,15 +91,15 @@ class UserDao{
 	}
 
 	void select() {
-		SqlSession session = ssf.openSession();
-
-		try {
-			List<Integer> mm = session.selectList("test04");
-			for (Integer item : mm) {
-				System.out.print(item+" ");
-			}System.out.println();
-		} catch (Exception e){ e.printStackTrace();
-		} finally { session.close(); }
+		Proxy.command(this, new Delegate() {
+			public int delegate(SqlSession session) {
+				List<Integer> mm = session.selectList("test04");
+				for (Integer item : mm) {
+					System.out.print(item+" ");
+				}System.out.println();
+				return 0;
+			}
+		}); 
 	}
 
 	void insert(final int num) {
@@ -72,14 +128,10 @@ class UserDao{
 public class Hello{
 	public static void main(String[] args) {
 		UserDao userdao = new UserDao();
-				userdao.insert(7777);
-				userdao.select();
-				userdao.update(7777);
-				userdao.select();
-				userdao.delete(7776);
 				userdao.select();
 	}
 }
+
 
 /*
 public class Hello {

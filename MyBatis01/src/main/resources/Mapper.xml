@@ -8,12 +8,29 @@
 		insert into table01(age) values (#{age})
 	</insert>
 	<delete id="test02" parameterType="int">
-		delete from table01 where age = #{age}
+		delete from table01 where age
+		= #{age}
 	</delete>
 	<update id="test03" parameterType="int">
-		update table01 set age =7776 where age = #{age}
+		update table01 set age =7776
+		where age = #{age}
 	</update>
 	<select id="test04" resultType="int">
 		select age from table01
+	</select>
+	<insert id="test05" parameterType="Pack.Person">
+		insert into table01(name)
+		values (#{name})
+	</insert>
+	<delete id="test06" parameterType="Pack.Person">
+		delete from table01 where name
+		= #{name}
+	</delete>
+	<update id="test07" parameterType="Pack.Person">
+		update table01 set age =666
+		where name = #{name}
+	</update>
+	<select id="test08" resultType="Pack.Person">
+		select * from table01
 	</select>
 </mapper>
